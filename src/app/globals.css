@@ -1,26 +1,69 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================= */
+/* Theme Tokens */
+/* ============================= */
+
+@theme {
+  --color-bg: #ffffff;
+  --color-text: #1C2A39;
+
+  --color-primary: #D4AF37;
+  --color-on-primary: #ffffff;
+
+  --color-secondary: #2E5B8C;
+  --color-on-secondary: #ffffff;
+
+  --font-heading: "Playfair Display", serif;
+  --font-body: "Inter", sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ============================= */
+/* Dark Theme Override */
+/* ============================= */
+
+.dark {
+  --color-bg: #0F172A;
+  --color-text: #F1F5F9;
+
+  --color-primary: #FACC15;
+  --color-secondary: #60A5FA;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ============================= */
+/* Base Styles */
+/* ============================= */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-body bg-bg text-text antialiased;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-semibold tracking-tight;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================= */
+/* Components */
+/* ============================= */
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary text-bg font-semibold px-6 py-3 rounded-xl
+          transition-all duration-300 inline-block
+          hover:brightness-110
+          focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary
+          active:scale-[0.98];
+  }
+  .btn-secondary {
+    @apply bg-secondary text-on-secondary font-semibold px-6 py-3 rounded-xl
+           transition-all duration-300 hover:brightness-90 inline-block;
+  }
 }
