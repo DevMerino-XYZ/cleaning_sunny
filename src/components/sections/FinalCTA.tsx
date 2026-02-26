@@ -1,10 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EstimateModal from "@/components/EstimateModal";
 
 export default function FinalCTA() {
   const [open, setOpen] = useState(false);
+
+  // Cerrar modal con Escape
+  useEffect(() => {
+    function handleKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
 
   return (
     <>
@@ -28,8 +37,9 @@ export default function FinalCTA() {
             </button>
 
             <a
-              href="tel:+16025551234"
+              href="tel: +(160) 26900 183"
               className="btn-secondary"
+              aria-label="Call Sunny’s Cleaning Service"
             >
               Call Now
             </a>
@@ -37,10 +47,7 @@ export default function FinalCTA() {
         </div>
       </section>
 
-      <EstimateModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-      />
+      <EstimateModal isOpen={open} onClose={() => setOpen(false)} />
     </>
   );
 }
