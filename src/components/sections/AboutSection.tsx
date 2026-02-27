@@ -61,7 +61,7 @@ export default function AboutSection() {
             />
           </div>
 
-          <div className="about-image-secondary absolute bottom-0 right-0 w-[55%] h-[55%] rounded-2xl overflow-hidden ">
+          <div className="about-image-secondary absolute bottom-0 right-0 w-[55%] h-[55%] rounded-2xl overflow-hidden border-1 border-white shadow-lg">
             <Image
               src="/images/team/team-office.webp"
               alt="Office cleaning"
@@ -70,7 +70,7 @@ export default function AboutSection() {
             />
           </div>
 
-          <div className="about-image-secondary absolute top-10 right-10 w-[40%] h-[40%] rounded-2xl overflow-hidden ">
+          <div className="about-image-secondary absolute top-10 right-10 w-[40%] h-[40%] rounded-2xl overflow-hidden border-1 border-white shadow-lg">
             <Image
               src="/images/team/team-home.webp"
               alt="Home cleaning"
