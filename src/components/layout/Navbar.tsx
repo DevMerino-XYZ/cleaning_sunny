@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import gsap from "gsap"
 import ThemeToggle from "@/components/ui/ThemeToggle"
+import EstimateModal from "@/components/EstimateModal" // <-- Importar el modal
 
 export default function Navbar() {
   const navRef = useRef<HTMLElement | null>(null)
@@ -13,6 +14,39 @@ export default function Navbar() {
   const isHidden = useRef(false)
 
   const [menuOpen, setMenuOpen] = useState(false)
+  const [isDark, setIsDark] = useState(false)
+  const [logoSrc, setLogoSrc] = useState("/logo-blue.png")
+  const [estimateOpen, setEstimateOpen] = useState(false) // <-- Estado para el modal
+
+  // Referencia para usar el valor actualizado de isDark dentro del event listener de scroll
+  const isDarkRef = useRef(isDark)
+
+  // Detectar cambios en el tema (clase 'dark' en el html)
+  useEffect(() => {
+    const checkDark = () => {
+      const dark = document.documentElement.classList.contains("dark")
+      setIsDark(dark)
+    }
+    checkDark()
+
+    const observer = new MutationObserver(checkDark)
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    })
+
+    return () => observer.disconnect()
+  }, [])
+
+  // Mantener la referencia actualizada con el último valor de isDark
+  useEffect(() => {
+    isDarkRef.current = isDark
+  }, [isDark])
+
+  // Actualizar el logo cuando cambie el tema
+  useEffect(() => {
+    setLogoSrc(isDark ? "/logo-white.png" : "/logo-blue.png")
+  }, [isDark])
 
   const navItems = [
     { label: "Home", href: "#home" },
@@ -23,7 +57,7 @@ export default function Navbar() {
     { label: "Contact", href: "#contact" },
   ]
 
-  // Scroll behavior (shrink + hide)
+  // Scroll behavior (shrink + hide) con fondo adaptable al tema
   useEffect(() => {
     const nav = navRef.current
     if (!nav) return
@@ -31,18 +65,25 @@ export default function Navbar() {
     const handleScroll = () => {
       const currentScroll = window.scrollY
 
-      // Shrink
+      // Colores según el tema actual (usando la referencia)
+      const bgColor =
+        currentScroll > 50
+          ? isDarkRef.current
+            ? "rgba(15,23,42,0.92)"  // fondo oscuro semitransparente (#0F172A)
+            : "rgba(255,255,255,0.92)" // fondo claro semitransparente
+          : "transparent"
+
+      const blur = currentScroll > 50 ? "blur(12px)" : "blur(0px)"
+      const shadow =
+        currentScroll > 50
+          ? "0 4px 12px rgba(0,0,0,0.05)"
+          : "0 0px 0px rgba(0,0,0,0)"
+
       gsap.to(nav, {
         height: currentScroll > 50 ? 64 : 80,
-        backgroundColor:
-          currentScroll > 50
-            ? "rgba(255,255,255,0.92)"
-            : "rgba(255,255,255,0)",
-        backdropFilter: currentScroll > 50 ? "blur(12px)" : "blur(0px)",
-        boxShadow:
-          currentScroll > 50
-            ? "0 4px 12px rgba(0,0,0,0.05)"
-            : "0 0px 0px rgba(0,0,0,0)",
+        backgroundColor: bgColor,
+        backdropFilter: blur,
+        boxShadow: shadow,
         duration: 0.35,
         ease: "power2.out",
       })
@@ -96,11 +137,10 @@ export default function Navbar() {
         className="fixed top-0 left-0 w-full z-50 h-20 flex items-center transition-all"
       >
         <div className="max-w-7xl mx-auto px-5 lg:px-8 w-full flex items-center justify-between">
-
-          {/* Logo */}
+          {/* Logo - cambia dinámicamente según el tema */}
           <Link href="#home">
             <Image
-              src="/logo.png"
+              src={logoSrc}
               alt="Sunny's Cleaning Service LLC"
               width={140}
               height={36}
@@ -123,12 +163,13 @@ export default function Navbar() {
 
             <ThemeToggle />
 
-            <Link
-              href="#contact"
+            {/* Botón Get a Free Estimate en desktop - ahora abre el modal */}
+            <button
+              onClick={() => setEstimateOpen(true)}
               className="bg-primary text-white px-5 py-2.5 rounded-xl font-semibold hover:brightness-110 transition"
             >
               Get a Free Estimate
-            </Link>
+            </button>
           </nav>
 
           {/* Mobile Right Side */}
@@ -137,20 +178,20 @@ export default function Navbar() {
 
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="relative w-8 h-6 flex flex-col justify-between"
+              className="relative w-8 h-6 flex flex-col justify-between text-text"
             >
               <span
-                className={`h-[2px] w-full bg-black transition-transform duration-300 ${
+                className={`h-[2px] w-full bg-current transition-transform duration-300 ${
                   menuOpen ? "rotate-45 translate-y-[10px]" : ""
                 }`}
               />
               <span
-                className={`h-[2px] w-full bg-black transition-opacity duration-300 ${
+                className={`h-[2px] w-full bg-current transition-opacity duration-300 ${
                   menuOpen ? "opacity-0" : ""
                 }`}
               />
               <span
-                className={`h-[2px] w-full bg-black transition-transform duration-300 ${
+                className={`h-[2px] w-full bg-current transition-transform duration-300 ${
                   menuOpen ? "-rotate-45 -translate-y-[10px]" : ""
                 }`}
               />
@@ -159,10 +200,10 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer - ahora usa variables de tema */}
       <div
         ref={mobileMenuRef}
-        className="fixed top-0 right-0 w-72 h-full bg-white shadow-xl z-40 p-8 flex flex-col gap-8 translate-x-full lg:hidden"
+        className="fixed top-0 right-0 w-72 h-full bg-bg text-text shadow-xl z-40 p-8 flex flex-col gap-8 translate-x-full lg:hidden"
       >
         {navItems.map((item) => (
           <Link
@@ -175,14 +216,20 @@ export default function Navbar() {
           </Link>
         ))}
 
-        <Link
-          href="#contact"
-          onClick={() => setMenuOpen(false)}
+        {/* Botón Get a Free Estimate en móvil - cierra menú y abre modal */}
+        <button
+          onClick={() => {
+            setMenuOpen(false)
+            setEstimateOpen(true)
+          }}
           className="mt-6 bg-primary text-white text-center py-3 rounded-xl font-semibold"
         >
           Get a Free Estimate
-        </Link>
+        </button>
       </div>
+
+      {/* Modal de estimación */}
+      <EstimateModal isOpen={estimateOpen} onClose={() => setEstimateOpen(false)} />
     </>
   )
 }
