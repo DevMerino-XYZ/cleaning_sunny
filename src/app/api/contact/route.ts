@@ -103,7 +103,7 @@ export async function POST(req: Request) {
 
     await resend.emails.send({
       from: process.env.RESEND_FROM || "Sunny's Cleaning <onboarding@resend.dev>", // Cambiar cuando tengas dominio
-      to: ["a21311070@uthermosillo.edu.mx"],
+      to: ["sunnyscleaningservices6@gmail.com"],
       subject: `New Estimate Request from ${sanitize(name)}`,
       replyTo: email,
       html,
