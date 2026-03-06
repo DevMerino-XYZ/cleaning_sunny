@@ -1,38 +1,32 @@
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from "next"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://sunnys-cleaning-services.com'
+  const baseUrl = "https://sunnys-cleaning-services.com"
 
   return [
     {
-      url: baseUrl,
+      url: `${baseUrl}`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: `${baseUrl}/#services`,
+      url: `${baseUrl}/about`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/#residential`,
+      url: `${baseUrl}/services`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/#commercial`,
+      url: `${baseUrl}/contact`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/#contact`,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 0.5,
+      changeFrequency: "monthly",
+      priority: 0.7,
     },
   ]
 }
