@@ -22,7 +22,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Sunny’s Cleaning Service LLC",
+  title: "Sunny’s Cleaning Services LLC – Professional House Cleaning in Clermont FL",
   description: "Professional residential and commercial cleaning services across Arizona.",
 }
 
