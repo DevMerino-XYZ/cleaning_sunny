@@ -25,6 +25,12 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://sunnys-cleaning-services.com"),
 
+  // ✅ Favicon usando logo-blue.png (debe estar en /public)
+  icons: {
+    icon: "/logo-blue.png",
+    apple: "/logo-blue.png",
+  },
+
   title: {
     default: "Sunny’s Cleaning Services LLC | Expert Cleaning in Arizona",
     template: "%s | Sunny’s Cleaning Services LLC",
