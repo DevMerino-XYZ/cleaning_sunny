@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/og-image.jpg", // Asegúrate de tener esta imagen en public
+        url: "logo-blue.png", // Asegúrate de tener esta imagen en public
         width: 1200,
         height: 630,
         alt: "Sunny's Cleaning Services LLC Arizona",
